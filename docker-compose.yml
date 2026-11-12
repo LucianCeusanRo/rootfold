@@ -1,0 +1,54 @@
+# Local self-host stack. Caddy terminates TLS with its internal CA.
+# Trust is local-only — do not expose this as a public production CA.
+services:
+  api:
+    build: .
+    environment:
+      ROOTFOLD_DATABASE_URL: sqlite:////data/rootfold.db
+      ROOTFOLD_JWT_SECRET: ${ROOTFOLD_JWT_SECRET:-dev-only-change-me}
+      ROOTFOLD_ADMIN_USERNAME: ${ROOTFOLD_ADMIN_USERNAME:-admin}
+      ROOTFOLD_ADMIN_PASSWORD: ${ROOTFOLD_ADMIN_PASSWORD:-changeme}
+      ROOTFOLD_WEBHOOK_KEY: ${ROOTFOLD_WEBHOOK_KEY:-lab-webhook-key}
+      ROOTFOLD_RECOVERY_SWEEP_SECONDS: ${ROOTFOLD_RECOVERY_SWEEP_SECONDS:-300}
+      ROOTFOLD_SWEEP_INTERVAL_SECONDS: ${ROOTFOLD_SWEEP_INTERVAL_SECONDS:-15}
+      ROOTFOLD_LOG_LEVEL: INFO
+      ROOTFOLD_NETBOX_URL: ${ROOTFOLD_NETBOX_URL:-}
+      ROOTFOLD_NETBOX_TOKEN: ${ROOTFOLD_NETBOX_TOKEN:-}
+      ROOTFOLD_NETBOX_FIXTURE: ${ROOTFOLD_NETBOX_FIXTURE:-}
+      ROOTFOLD_JIRA_URL: ${ROOTFOLD_JIRA_URL:-}
+      ROOTFOLD_JIRA_USER: ${ROOTFOLD_JIRA_USER:-}
+      ROOTFOLD_JIRA_TOKEN: ${ROOTFOLD_JIRA_TOKEN:-}
+      ROOTFOLD_JIRA_PROJECT: ${ROOTFOLD_JIRA_PROJECT:-NOC}
+      ROOTFOLD_JIRA_ISSUE_TYPE: ${ROOTFOLD_JIRA_ISSUE_TYPE:-Incident}
+      ROOTFOLD_SNOW_URL: ${ROOTFOLD_SNOW_URL:-}
+      ROOTFOLD_SNOW_USER: ${ROOTFOLD_SNOW_USER:-}
+      ROOTFOLD_SNOW_PASSWORD: ${ROOTFOLD_SNOW_PASSWORD:-}
+      ROOTFOLD_SLA_PERCENT: ${ROOTFOLD_SLA_PERCENT:-99.9}
+    volumes:
+      - rootfold-data:/data
+      - ./examples:/examples:ro
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz')"]
+      interval: 10s
+      timeout: 3s
+      retries: 8
+
+  caddy:
+    image: caddy:2.8-alpine
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+      - "8443:443"
+    volumes:
+      - ./deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  rootfold-data:
+  caddy-data:
+  caddy-config:

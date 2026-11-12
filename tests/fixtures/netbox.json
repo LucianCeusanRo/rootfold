@@ -1,0 +1,166 @@
+{
+  "recorded_at": "2026-11-11T08:00:00Z",
+  "base_url": "https://netbox.lab.example",
+  "note": "Recorded NetBox REST pages for offline tests. Fictional Carpathian Carrier subset — not a real network.",
+  "pages": {
+    "/api/dcim/sites/": {
+      "count": 3,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": 1,
+          "name": "Bacău Metro PoP",
+          "slug": "bcu-pop",
+          "status": {"value": "active", "label": "Active"},
+          "region": {"id": 1, "name": "Moldova", "slug": "moldova"},
+          "description": "Metro aggregation"
+        },
+        {
+          "id": 2,
+          "name": "Onești PoP",
+          "slug": "ons",
+          "status": {"value": "active", "label": "Active"},
+          "region": {"id": 1, "name": "Moldova", "slug": "moldova"},
+          "description": ""
+        },
+        {
+          "id": 3,
+          "name": "Dărmănești PoP",
+          "slug": "drm",
+          "status": {"value": "active", "label": "Active"},
+          "region": {"id": 1, "name": "Moldova", "slug": "moldova"},
+          "description": "Last-mile hub; microwave-fed"
+        }
+      ]
+    },
+    "/api/dcim/devices/": {
+      "count": 4,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": 10,
+          "name": "BCU-POP-RTR-1",
+          "device_role": {"name": "Router", "slug": "router"},
+          "role": {"name": "Router", "slug": "router"},
+          "device_type": {"model": "ACX710", "slug": "acx710", "manufacturer": {"name": "Juniper", "slug": "juniper"}},
+          "site": {"id": 1, "name": "Bacău Metro PoP", "slug": "bcu-pop"},
+          "primary_ip4": {"address": "10.0.1.1/24"}
+        },
+        {
+          "id": 11,
+          "name": "ONS-RTR-1",
+          "device_role": {"name": "Router", "slug": "router"},
+          "role": {"name": "Router", "slug": "router"},
+          "device_type": {"model": "ACX710", "slug": "acx710", "manufacturer": {"name": "Juniper", "slug": "juniper"}},
+          "site": {"id": 2, "name": "Onești PoP", "slug": "ons"},
+          "primary_ip4": {"address": "10.0.2.1/24"}
+        },
+        {
+          "id": 12,
+          "name": "DRM-RTR-1",
+          "device_role": {"name": "Router", "slug": "router"},
+          "role": {"name": "Router", "slug": "router"},
+          "device_type": {"model": "ACX710", "slug": "acx710", "manufacturer": {"name": "Juniper", "slug": "juniper"}},
+          "site": {"id": 3, "name": "Dărmănești PoP", "slug": "drm"},
+          "primary_ip4": {"address": "10.0.3.1/24"}
+        },
+        {
+          "id": 13,
+          "name": "DRM-SW-1",
+          "device_role": {"name": "Switch", "slug": "switch"},
+          "role": {"name": "Switch", "slug": "switch"},
+          "device_type": {"model": "C9300", "slug": "c9300", "manufacturer": {"name": "Cisco", "slug": "cisco"}},
+          "site": {"id": 3, "name": "Dărmănești PoP", "slug": "drm"},
+          "primary_ip4": {"address": "10.0.3.10/24"}
+        }
+      ]
+    },
+    "/api/dcim/cables/": {
+      "count": 2,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": 20,
+          "label": "cir-bcu-ons",
+          "type": {"value": "smf", "label": "Singlemode Fiber"},
+          "status": {"value": "connected", "label": "Connected"},
+          "a_terminations": [
+            {
+              "object_type": "dcim.interface",
+              "object": {
+                "name": "et-0/0/0",
+                "device": {"name": "BCU-POP-RTR-1", "site": {"slug": "bcu-pop", "name": "Bacău Metro PoP"}}
+              }
+            }
+          ],
+          "b_terminations": [
+            {
+              "object_type": "dcim.interface",
+              "object": {
+                "name": "et-0/0/0",
+                "device": {"name": "ONS-RTR-1", "site": {"slug": "ons", "name": "Onești PoP"}}
+              }
+            }
+          ]
+        },
+        {
+          "id": 21,
+          "label": "drm-internal-patch",
+          "type": {"value": "cat6", "label": "CAT6"},
+          "status": {"value": "connected", "label": "Connected"},
+          "a_terminations": [
+            {
+              "object": {
+                "name": "ge-0/0/1",
+                "device": {"name": "DRM-RTR-1", "site": {"slug": "drm", "name": "Dărmănești PoP"}}
+              }
+            }
+          ],
+          "b_terminations": [
+            {
+              "object": {
+                "name": "Gi1/0/1",
+                "device": {"name": "DRM-SW-1", "site": {"slug": "drm", "name": "Dărmănești PoP"}}
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "/api/circuits/circuits/": {
+      "count": 2,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": 30,
+          "cid": "cir-ons-drm-mw",
+          "description": "Onești — Dărmănești last-mile radio hop",
+          "type": {"name": "Microwave", "slug": "microwave"},
+          "status": {"value": "active", "label": "Active"},
+          "provider": {"name": "Carpathian Radio", "slug": "carpathian-radio"},
+          "commit_rate": 200,
+          "termination_a": {"site": {"slug": "ons", "name": "Onești PoP"}, "device": {"name": "ONS-RTR-1"}},
+          "termination_z": {"site": {"slug": "drm", "name": "Dărmănești PoP"}, "device": {"name": "DRM-RTR-1"}}
+        },
+        {
+          "id": 31,
+          "cid": "cir-drm-customer",
+          "description": "Access tail for Forestworks SRL",
+          "type": {"name": "Fiber", "slug": "fiber"},
+          "status": {"value": "active", "label": "Active"},
+          "provider": {"name": "Carpathian Carrier", "slug": "carpathian"},
+          "tenant": {"name": "Forestworks SRL", "slug": "forestworks"},
+          "commit_rate": 100,
+          "terminations": [
+            {"site": {"slug": "drm", "name": "Dărmănești PoP"}, "device": {"name": "DRM-SW-1"}},
+            {"site": {"slug": "drm", "name": "Dărmănești PoP"}}
+          ]
+        }
+      ]
+    }
+  }
+}

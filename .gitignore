@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.sqlite3
+*.db
+
+# Local data and secrets
+data/
+.env
+*.pem
+*.key
+deploy/caddy/certs/
+caddy_data/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Playwright
+test-results/
+playwright-report/
+!.env.example

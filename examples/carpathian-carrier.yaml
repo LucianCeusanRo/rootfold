@@ -1,0 +1,329 @@
+# Fictional regional carrier used by the Rootfold lab and tests.
+# This is simulated inventory — not a real network, not Lucian's workplace.
+# Name: Carpathian Carrier (lab)
+
+sites:
+  - slug: bcu-dc
+    name: Bacău Data Center
+    region: Moldova
+    notes: Core routing and peering
+  - slug: bcu-pop
+    name: Bacău Metro PoP
+    region: Moldova
+  - slug: ons
+    name: Onești PoP
+    region: Moldova
+  - slug: drm
+    name: Dărmănești PoP
+    region: Moldova
+    notes: Last-mile hub; microwave-fed
+  - slug: cms
+    name: Comănești PoP
+    region: Moldova
+    notes: Sits behind Dărmănești
+  - slug: toc
+    name: Târgu Ocna PoP
+    region: Moldova
+  - slug: adj
+    name: Adjud PoP
+    region: Moldova
+  - slug: fcs
+    name: Focșani PoP
+    region: Moldova
+  - slug: rmn
+    name: Roman PoP
+    region: Moldova
+  - slug: pnt
+    name: Piatra Neamț PoP
+    region: Moldova
+  - slug: bcz
+    name: Bicaz Edge
+    region: Moldova
+
+devices:
+  - slug: bcu-dc-rtr1
+    name: BCU-DC-RTR-1
+    role: router
+    site: bcu-dc
+    management_ip: 10.0.0.1
+    vendor: Juniper
+    model: MX204
+  - slug: bcu-dc-rtr2
+    name: BCU-DC-RTR-2
+    role: router
+    site: bcu-dc
+    management_ip: 10.0.0.2
+    vendor: Juniper
+    model: MX204
+  - slug: bcu-pop-rtr1
+    name: BCU-POP-RTR-1
+    role: router
+    site: bcu-pop
+    management_ip: 10.0.1.1
+    vendor: Juniper
+    model: ACX710
+  - slug: bcu-pop-sw1
+    name: BCU-POP-SW-1
+    role: switch
+    site: bcu-pop
+    management_ip: 10.0.1.10
+    vendor: Cisco
+    model: C9300
+  - slug: ons-rtr1
+    name: ONS-RTR-1
+    role: router
+    site: ons
+    management_ip: 10.0.2.1
+    vendor: Juniper
+    model: ACX710
+  - slug: ons-radio1
+    name: ONS-MW-1
+    role: radio
+    site: ons
+    management_ip: 10.0.2.20
+    vendor: Ceragon
+    model: IP-20C
+  - slug: drm-rtr1
+    name: DRM-RTR-1
+    role: router
+    site: drm
+    management_ip: 10.0.3.1
+    vendor: MikroTik
+    model: CCR2004
+  - slug: drm-sw1
+    name: DRM-SW-1
+    role: switch
+    site: drm
+    management_ip: 10.0.3.10
+    vendor: Cisco
+    model: C9200
+  - slug: drm-radio1
+    name: DRM-MW-1
+    role: radio
+    site: drm
+    management_ip: 10.0.3.20
+    vendor: Ceragon
+    model: IP-20C
+  - slug: drm-backup
+    name: DRM-BACKUP
+    role: server
+    site: drm
+    management_ip: 10.0.3.50
+    vendor: Dell
+    model: R450
+    # Leftover-failure target in the Sept 2026 recovery-sweep scenario.
+  - slug: cms-rtr1
+    name: CMS-RTR-1
+    role: router
+    site: cms
+    management_ip: 10.0.4.1
+    vendor: MikroTik
+    model: CCR2004
+  - slug: toc-rtr1
+    name: TOC-RTR-1
+    role: router
+    site: toc
+    management_ip: 10.0.5.1
+    vendor: MikroTik
+    model: CCR2004
+  - slug: adj-rtr1
+    name: ADJ-RTR-1
+    role: router
+    site: adj
+    management_ip: 10.0.6.1
+    vendor: Juniper
+    model: ACX710
+  - slug: fcs-rtr1
+    name: FCS-RTR-1
+    role: router
+    site: fcs
+    management_ip: 10.0.7.1
+    vendor: Juniper
+    model: ACX710
+  - slug: rmn-rtr1
+    name: RMN-RTR-1
+    role: router
+    site: rmn
+    management_ip: 10.0.8.1
+    vendor: Juniper
+    model: ACX710
+  - slug: pnt-rtr1
+    name: PNT-RTR-1
+    role: router
+    site: pnt
+    management_ip: 10.0.9.1
+    vendor: Juniper
+    model: ACX710
+  - slug: bcz-rtr1
+    name: BCZ-RTR-1
+    role: router
+    site: bcz
+    management_ip: 10.0.10.1
+    vendor: MikroTik
+    model: CCR2004
+  - slug: bcz-radio1
+    name: BCZ-MW-1
+    role: radio
+    site: bcz
+    management_ip: 10.0.10.20
+    vendor: Ceragon
+    model: IP-20C
+
+circuits:
+  - slug: cir-core-east
+    name: BCU-DC — BCU-POP fiber east
+    media: fiber
+    a_site: bcu-dc
+    z_site: bcu-pop
+    a_device: bcu-dc-rtr1
+    z_device: bcu-pop-rtr1
+    capacity_mbps: 10000
+    vendor_circuit_id: FO-BCU-001
+  - slug: cir-core-west
+    name: BCU-DC — BCU-POP fiber west
+    media: fiber
+    a_site: bcu-dc
+    z_site: bcu-pop
+    a_device: bcu-dc-rtr2
+    z_device: bcu-pop-rtr1
+    capacity_mbps: 10000
+    vendor_circuit_id: FO-BCU-002
+  - slug: cir-bcu-ons
+    name: BCU-POP — Onești fiber
+    media: fiber
+    a_site: bcu-pop
+    z_site: ons
+    a_device: bcu-pop-rtr1
+    z_device: ons-rtr1
+    capacity_mbps: 10000
+  - slug: cir-ons-adj
+    name: Onești — Adjud fiber
+    media: fiber
+    a_site: ons
+    z_site: adj
+    a_device: ons-rtr1
+    z_device: adj-rtr1
+    capacity_mbps: 10000
+  - slug: cir-adj-fcs
+    name: Adjud — Focșani fiber
+    media: fiber
+    a_site: adj
+    z_site: fcs
+    a_device: adj-rtr1
+    z_device: fcs-rtr1
+    capacity_mbps: 10000
+  - slug: cir-bcu-rmn
+    name: BCU-POP — Roman fiber
+    media: fiber
+    a_site: bcu-pop
+    z_site: rmn
+    a_device: bcu-pop-rtr1
+    z_device: rmn-rtr1
+    capacity_mbps: 10000
+  - slug: cir-rmn-pnt
+    name: Roman — Piatra Neamț fiber
+    media: fiber
+    a_site: rmn
+    z_site: pnt
+    a_device: rmn-rtr1
+    z_device: pnt-rtr1
+    capacity_mbps: 10000
+  - slug: cir-ons-drm-mw
+    name: Onești — Dărmănești microwave
+    media: microwave
+    a_site: ons
+    z_site: drm
+    a_device: ons-radio1
+    z_device: drm-radio1
+    capacity_mbps: 400
+    vendor_circuit_id: MW-ONS-DRM-1
+  - slug: cir-drm-cms-mw
+    name: Dărmănești — Comănești microwave
+    media: microwave
+    a_site: drm
+    z_site: cms
+    a_device: drm-radio1
+    z_device: cms-rtr1
+    capacity_mbps: 200
+    vendor_circuit_id: MW-DRM-CMS-1
+  - slug: cir-ons-toc-mw
+    name: Onești — Târgu Ocna microwave
+    media: microwave
+    a_site: ons
+    z_site: toc
+    a_device: ons-rtr1
+    z_device: toc-rtr1
+    capacity_mbps: 200
+  - slug: cir-pnt-bcz-mw
+    name: Piatra Neamț — Bicaz microwave
+    media: microwave
+    a_site: pnt
+    z_site: bcz
+    a_device: pnt-rtr1
+    z_device: bcz-radio1
+    capacity_mbps: 200
+  - slug: cir-drm-customer
+    name: Dărmănești — Forestworks access
+    media: fiber
+    a_site: drm
+    z_site: drm
+    a_device: drm-sw1
+    capacity_mbps: 100
+    customer: Forestworks SRL
+    vendor_circuit_id: FO-DRM-C-17
+
+bundles:
+  - slug: lacp-bcu-core
+    name: BCU-POP LACP to core
+    device: bcu-pop-rtr1
+    members:
+      - cir-core-east
+      - cir-core-west
+
+dependencies:
+  # Core LACP: if the bundle is down, the metro PoP and everything behind it is a symptom.
+  - parent: {type: bundle, slug: lacp-bcu-core}
+    child: {type: site, slug: bcu-pop}
+  - parent: {type: site, slug: bcu-pop}
+    child: {type: site, slug: ons}
+  - parent: {type: site, slug: bcu-pop}
+    child: {type: site, slug: rmn}
+
+  - parent: {type: circuit, slug: cir-bcu-ons}
+    child: {type: site, slug: ons}
+  - parent: {type: circuit, slug: cir-ons-adj}
+    child: {type: site, slug: adj}
+  - parent: {type: circuit, slug: cir-adj-fcs}
+    child: {type: site, slug: fcs}
+  - parent: {type: circuit, slug: cir-bcu-rmn}
+    child: {type: site, slug: rmn}
+  - parent: {type: circuit, slug: cir-rmn-pnt}
+    child: {type: site, slug: pnt}
+
+  # Microwave last mile — used by the recovery-sweep lab scenario.
+  - parent: {type: circuit, slug: cir-ons-drm-mw}
+    child: {type: site, slug: drm}
+  - parent: {type: site, slug: drm}
+    child: {type: site, slug: cms}
+  - parent: {type: site, slug: drm}
+    child: {type: circuit, slug: cir-drm-customer}
+  - parent: {type: circuit, slug: cir-drm-cms-mw}
+    child: {type: site, slug: cms}
+  - parent: {type: circuit, slug: cir-ons-toc-mw}
+    child: {type: site, slug: toc}
+  - parent: {type: circuit, slug: cir-pnt-bcz-mw}
+    child: {type: site, slug: bcz}
+
+  # Downstream site chains for blast radius.
+  - parent: {type: site, slug: ons}
+    child: {type: site, slug: adj}
+  - parent: {type: site, slug: ons}
+    child: {type: site, slug: drm}
+  - parent: {type: site, slug: ons}
+    child: {type: site, slug: toc}
+  - parent: {type: site, slug: adj}
+    child: {type: site, slug: fcs}
+  - parent: {type: site, slug: rmn}
+    child: {type: site, slug: pnt}
+  - parent: {type: site, slug: pnt}
+    child: {type: site, slug: bcz}
